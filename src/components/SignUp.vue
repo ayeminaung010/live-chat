@@ -14,16 +14,16 @@ import { ref } from 'vue';
 import useSignUp from '../composables/useSignUp';
 
 export default {
-    setup(){
+    setup(props,context){
         const displayName = ref("");
         const email = ref("");
         const password = ref("");
         const  {error,createAccount} = useSignUp();
         const signUpHandler = async() => {
             const res = await createAccount(email.value,password.value,displayName.value)
-            // if(res){
-                
-            // }
+            if(res){
+                context.emit("enterChatRoom")
+            }
         }
         return {displayName,email,password,signUpHandler,error};
     }

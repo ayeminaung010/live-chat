@@ -12,16 +12,16 @@
 import { ref } from "vue";
 import useSignIn from "../composables/useSignIn";
 export default {
-  setup() {
+  setup(props,context) {
     const email = ref("");
     const password = ref("");
 
     const { error, SignIn } = useSignIn();
     const loginHandler = async () => {
       const res = await SignIn(email.value, password.value);
-    //   if(res) {
-
-    //   }
+      if(res) {
+        context.emit("enterChatRoom")
+      }
     };
 
     return { email, password, loginHandler, error };
