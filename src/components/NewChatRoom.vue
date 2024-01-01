@@ -12,16 +12,20 @@
 import getUser from '@/composables/getUser';
 import { serverTimestamp } from 'firebase/firestore';
 import { ref } from 'vue'
+import useCollection from '../composables/useCollection'
+
 export default {
     setup(){
         const message = ref("");
         const {user} = getUser();
-        const handleMessage = () => {
+        const {error,addDocument} = useCollection("message");
+        const handleMessage = async() => {
             let chat = {
                 message : message.value,
                 name : user.value.displayName,
                 created_at: serverTimestamp()
             }
+            await addDocument(chat);
             message.value = "";
         }
         return {message,handleMessage};
