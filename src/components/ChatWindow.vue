@@ -1,6 +1,6 @@
 <template>
   <div class="chat-window">
-    <div class="messages" >
+    <div class="messages" ref="msgBox">
       <div class="single" v-for="message in formattedMessages" :key="message.id">
         <span class="created-at">{{ message.created_at }}</span>
         <span class="name">{{ message.name }}</span>
@@ -14,13 +14,18 @@
 import { db } from "@/firebase/config";
 import { formatDistanceToNow } from 'date-fns';
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { computed, ref } from "vue";
+import { computed, onUpdated, ref } from "vue";
 export default {
   setup() {
     const messages = ref([]);
     const chatData = collection(db,"message");
     const chatQuery = query(chatData, orderBy("created_at", "asc"));
-
+    const msgBox = ref(null)
+    //scroll updated for new messages
+    onUpdated(() => {
+      msgBox.value.scrollTop = msgBox.value.scrollHeight
+    })
+    
     const formattedMessages = computed(() => {
       return messages.value.map((msg) => {
         let formatTime = formatDistanceToNow(msg.created_at.toDate());
@@ -40,7 +45,7 @@ export default {
     });
 
     return {
-      messages,formattedMessages
+      messages,formattedMessages,msgBox
     };
   },
 };
