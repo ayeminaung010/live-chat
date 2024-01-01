@@ -5,10 +5,23 @@
 </template>
 
 <script>
+import { watch } from 'vue'
 import Navbar from '../components/Navbar'
+import getUser from '@/composables/getUser'
+import { useRouter } from 'vue-router';
+
 export default {
   components: { Navbar },
-
+  setup(){
+    const {user} = getUser();
+    const router = useRouter();
+    watch(user,() => {
+      if(!user.value) {
+        //redirect welcome 
+        router.push("/");
+      }
+    })
+  }
 }
 </script>
 

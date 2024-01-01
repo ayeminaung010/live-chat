@@ -17,7 +17,6 @@ import getUser from '../composables/getUser'
 
 export default {
     setup(){
-        
         const logoutHandler = async() => {
             try{
                 await signOut(auth);
